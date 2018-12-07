@@ -1,6 +1,7 @@
 const connection = require('../../dbconection');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
 
 exports.all_products = (req, res, next) => {
@@ -29,8 +30,8 @@ exports.products_by_city = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.decode(token);
     const sql = 'SELECT products.*\n' +
-        'FROM deli_teste.products\n' +
-        'INNER JOIN deli_teste.users ON products.seller = users.id AND users.city = ?;';
+        'FROM ' + process.env.DATABASE + '.products\n' +
+        'INNER JOIN ' + process.env.DATABASE + '.users ON products.seller = users.id AND users.city = ?;';
 
     connection.query(sql, decoded.city, (err, rows, fields) => {
         if (!err) {
